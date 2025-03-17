@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Crude_MVC.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1 class="text-center text-secondary">Products</h1>
+<a href="@Url.Action("Create", "Products")" class="btn btn-dark mb-3">Add Product</a>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                @*<th>Created At</th>*@
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Select((item, index) => new { Item = item, Index = index + 1 }))
+            {
+                <tr>
+                    <td>@product.Index</td>
+                    <td>@product.Item.Name</td>
+                    <td>@product.Item.Price</td>
+                    <td>@product.Item.Description</td>
+                   @* <td>@product.Item.CreatedAt.ToString("yyyy-MM-dd")</td>*@
+                    <td>
+                        <a href="@Url.Action("Edit", "Products", new { id = product.Item.Id })" class="btn btn-dark btn-sm">Edit</a>
+                        <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            <input type="hidden" name="id" value="@product.Item.Id" />
+                            <button type="submit" class="btn btn-dark btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
